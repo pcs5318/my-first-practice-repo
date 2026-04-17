@@ -1,0 +1,204 @@
+---
+title: "Reproducible Data Analysis"
+date: "April 8, 2026"
+author: "Paige Sigmund"
+format: pdf
+execute: 
+  echo: false
+---
+
+## Question 6
+
+### Busiest Airports: Table #1
+
+```{r tbl-passengers, fig.cap="Displays the average number of passengers passing through different airports (ATL, FRA, PKX) in different years (2020-2025)."}
+library(tidyverse)
+
+airports <- data.frame(
+  airport = c("ATL","ATL","ATL","ATL","ATL","ATL",
+              "FRA","FRA","FRA","FRA","FRA","FRA",
+              "PKX","PKX","PKX","PKX","PKX","PKX"),
+  
+  year = rep(2020:2025, 6),
+  
+  passengers = c(
+    42, 75, 93, 104, 108, 110,   # ATL
+    18, 24, 48, 59, 70, 75,      # FRA
+    16, 25, 35, 40, 45, 50,       # PKX
+    28, 48, 65, 75, 85, 90,      # LAX
+    25, 40, 60, 70, 80, 88,      # DXB
+    30, 55, 70, 85, 95, 100      # HND
+    )
+  )
+
+library(dplyr)
+library(tidyr)
+
+airport_table <- airports %>%
+  group_by(airport, year) %>%
+  summarise(passengers = mean(passengers), .groups = "drop") %>%
+  complete(airport, year = 2020:2025) %>%  
+  pivot_wider(names_from = year, values_from = passengers)
+
+airport_table
+```
+
+## Question 7
+
+### Busiest Airports Plot/Graph Figure #1
+
+```{r fig-passengers, fig.cap="Passenger trends for major airports (2020–2025). ATL in red, FRA in green, and PKX in blue."}
+airports_clean <- airports %>%
+  group_by(airport, year) %>%
+  summarise(passengers = mean(passengers), .groups = "drop")
+
+ggplot(airports_clean, aes(x = year, y = passengers, color = airport, group = airport)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  labs(
+    title = "Passenger Trends for Major Airports (2020-2025)",
+    x = "Year",
+    y = "Passengers (Millions)",
+    color = "Airport"
+  ) +
+  theme_minimal()
+```
+
+## Question 8
+
+### Busiest Airports: Narrative Text
+
+As shown in @fig-passengers, passenger traffic increased steadily for all three airports from 2020 to 2025. ATL consistently handled the highest volume of passengers, rising from 35 million in 2020 to 100 million in 2025. FRA and PKX also experienced substantial growth, with FRA slightly surpassing PKX after 2022. These trends suggest a strong recovery and expansion in air travel over this period, as also reflected in the values presented in @tbl-passengers.
+
+## Question 9
+
+### Monte Carlo Numeric Integration: Plot/Graph Figure #2
+
+```{r fig-integration, fig.cap="The image features four scatter plots arranged in a 2x2 grid, depicting the estimation of an area under a curve for different sample sizes (n). Each plot contains a set of points, a curve, and a legend indicating the regions classified as above or below the curve."}
+library(tidyverse)
+library(patchwork)
+
+monte_carlo_sim <- function(n, xmin, xmax, ymin, ymax, f) {
+  x <- runif(n, xmin, xmax)
+  y <- runif(n, ymin, ymax)
+  y_func <- f(x)
+  inside <- y <= y_func
+  data.frame(
+    x = x,
+    y = y,
+    y_func = y_func,
+    inside = inside
+  )
+}
+
+make_plot <- function(n) {
+
+  df <- monte_carlo_sim(
+    n = n,
+    xmin = 0, xmax = 1,
+    ymin = 0, ymax = 1.5,
+    f = function(x) dbeta(x, shape1 = 1.5, shape2 = 1)
+  ) %>%
+    mutate(region = ifelse(inside, "below", "above"))
+
+  area_box <- (1 - 0) * (1.5 - 0)
+  estimate <- mean(df$inside) * area_box
+
+  ggplot(df, aes(x = x, y = y, color = region)) +
+    geom_point(alpha = 0.6) +
+    stat_function(
+      fun = dbeta,
+      args = list(shape1 = 1.5, shape2 = 1),
+      color = "black",
+      linewidth = 1
+    ) +
+    labs(
+      title = paste("Monte Carlo Integration (n =", n, ")"),
+      subtitle = paste("Estimated Area =", round(estimate, 4)),
+      x = "x",
+      y = "y",
+      color = "Region"
+    ) +
+    theme_minimal()
+}
+
+plot10 <- make_plot(10)
+plot100 <- make_plot(100)
+plot1000 <- make_plot(1000)
+plot10000 <- make_plot(10000)
+
+plot10 + plot100 + plot1000 + plot10000
+```
+
+## Question 10
+
+### Monte Carlo Integration: Narrative Text
+
+@fig-integration shows four scatter plots of Monte Carlo integration with increasing sample sizes (n = 10, 100, 1000, 10000). Points are colored based on whether they fall above or below the curve, and the proportion below estimates the area. As n increases, the points more clearly fill the region and the estimated area becomes more accurate.
+
+### Question 13
+
+### Planning and Prompting: Plan Informed-Response
+
+#### My plan:
+
+The goal is to clean up the calcium dataset so it’s easier to work with, and then make a graph to help understand what’s going on with the two groups over time.
+
+The calcium.csv file R tidyverse for cleaning and plotting Basic idea of what tidy data is
+
+Load the calcium.csv file into R. Change the data from wide format to long format using something like pivot_longer() so it’s easier to analyze. Make sure there is a column for time (Initial, Year 1, etc.), calcium level, and group (null vs diet/exercise). Check that the data looks right after changing it. Make a graph (like a line graph or boxplot) to compare the two groups over time. Look at the graph to see if there are any trends or differences between the groups.
+
+#### GenAI Response (Chat GPT, accessed 4/12):
+
+The goal is to tidy and wrangle the calcium dataset so it is easier to analyze, and then create a visualization that helps show patterns between the two groups over time.
+
+The calcium.csv file An R environment (or genAI tool with R support) Packages like tidyverse (for pivot_longer, mutate, and plotting) Basic understanding of tidy data and visualization
+
+Load the calcium.csv file into R. Reshape the data from wide format to long format using pivot_longer() so that: One column represents time (Initial, Year 1, Year 2, Year 3) One column represents calcium level One column represents group (null vs diet/exercise) Clean up column names and create a clear group variable. Check the data to make sure it looks correct (right number of rows and values). Create a plot (like a line graph or boxplot) to compare calcium levels over time between the two groups. Use the visualization to look for trends, such as whether the treatment group changes differently over time compared to the control group.
+
+## Question 14
+
+### Planning and prompting: Generic Response
+
+#### Figure 3: Calcium Plot/Graph
+
+```{r fig-calcium, fig.cap="Average calcium values for each column in  the dataset."}
+knitr::include_graphics("chatgptPlot.png")
+```
+
+#### GenAI Generic Response (Chat GPT, accessed 4/12):
+
+This plot shows the average value for each column in the dataset. Each point represents the mean of one variable, and the line helps compare how these averages change across the columns. Most of the values are fairly close together, but there are a few noticeable drops, especially in some of the later columns. Overall, the graph makes it easy to see differences in average calcium levels across the groups and time points, even though it doesn’t show the full spread of the data.
+
+## Question 15
+
+### Planning and Prompting: Narrative Text
+
+#### GenAI Narrative Text (Chat GPT, accessed 4/12):
+
+The plot displays the average calcium levels for each column in the dataset, allowing for a quick comparison across groups and time points. Most of the averages are relatively similar, clustering around the low 70s, but there are noticeable decreases in certain columns, suggesting some variation over time or between groups. The dip in a few of the later columns may indicate changes in calcium levels for one of the groups as the study progresses. Overall, the visualization helps highlight general trends in the data, though it does not show individual differences or variability within each group. \#### My Narrative Text: The plot shows the average calcium levels for each column in the dataset so it’s easy to compare them. Most of the values are pretty close to each other, but there are a few points where the average drops more. This could mean that calcium levels changed a bit over time or between the two groups. Overall, the graph helps give a general idea of what the data looks like, even though it doesn’t show all the details for each person.
+
+## Question 16:
+
+### Self-Reflection:
+
+I reflect on what I’ve learned so far in the course, especially with working with data in R. At first, I struggled a lot with pivot_longer()—I didn’t understand how to take the calcium dataset and turn all the different year columns into one “time” column. I would either get errors or my data would come out wrong with missing values. Now I understand that I need to specify the columns correctly and create new variables like time and group so the data is tidy. I also found making visualizations confusing at the beginning, especially in ggplot when I didn’t know what to put for aes() or why my graph wasn’t showing the right values. For example, I mixed up the x and y variables when trying to plot calcium levels over time, and my graph didn’t make sense. With more practice, I’ve gotten better at setting up graphs correctly and understanding what they show. Overall, I can see improvement from being confused about both data cleaning and plotting to feeling more comfortable doing both.
+
+{{< pagebreak >}}
+
+## Question 17
+
+### GenAI Usage Appendix
+
+Chat GPT was used for question 13, 14, and 15, accessed 4/12.
+
+## Question 18
+### Code Appendix
+
+```{r}
+#| ref.label: tbl-passengers, fig-passengers, fig-integration, fig-calcium
+#| echo: true
+#| eval: false
+```
+
+
