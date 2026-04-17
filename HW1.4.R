@@ -6,7 +6,8 @@ restarauntsampler <- function(n = 1, rest_lists = c("Big Bowl Noodle House", "Bi
                                 "Dunkin", "Uncle Chens", "D.P. Dough", "Buffalo Wild Wings", 
                                 "Tropical Smoothie Cafe", "Chipotle Mexican Grill", "Osaka", 
                                 "Beijing Restaurant", "Playa Bowls")){
-if (n < rest_lists) {
+# Randomly select one restaurant out of the list provided and return the choice
+  if (n < rest_lists) {
   return("Number of desired restaraunts exceeds number of restaurant choices.")
 }
 }
