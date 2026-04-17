@@ -85,12 +85,3 @@ flaggedPoints <- myPoints |>
   mutate(
     area = (count / 10000) * (1 - 0) * (1.5 - 0)
   )
-
-
-
-
-
-
-
-
-
