@@ -1,0 +1,21 @@
+---
+title: "Planning"
+format: pdf
+---
+
+## Goals
+- Practice using GitHub and version control
+- Improve coding and commenting in R
+- Keep assignments organized in one place
+
+## Needs
+- GitHub account and repository
+- R and RStudio
+- Course assignments and datasets
+
+## Steps
+- Regularly upload and commit assignments
+- Write clear commit messages
+- Add comments to code for readability
+- Organize files in the repository
+- Update README and maintain the repo
