@@ -1,16 +1,21 @@
-# my-first-practice-repo
-## About
+## Project Title
 This is a practice repo for learning git and github in Stat 184.
 
-## Data Sources
-No data is used.
+## Overview
+This repository is mainly for practicing how to use GitHub, including creating repositories, making commits, and organizing files. It also shows my work on adding comments and improving code readability in R while completing assignments.
+
+## Interesting Insight (Optional)
+This is optional but highly recommended. You'll include one interesting insight from your project as part of the README. This insight is most effective when you include a visual. Keep in mind that this visual must be included as an image file (e.g., JPG, PNG, etc.). You can export plots created with {ggplot2} by using the function ggsave.
+One interesting insight from this project is how important version control is for keeping work organized and trackable. Using GitHub makes it easy to see changes over time, go back to previous versions, and understand what was updated. It also shows how adding clear comments and commit messages makes code much easier to follow and work with later, for example, like the comment we added within HW 1.4.
+## Data Sources and Acknowledgements
+Data comes from course materials and STAT 184 assignments. Credit to R and any packages used such as ggplot2 and tidyverse.
 
 ## Current Plan
-Learning basics of version control.
+Continue learning the basics of version control by regularly using GitHub to commit changes, track progress, and manage files. I plan to practice organizing repositories, writing clearer commit messages, and improving code comments to make my work easier to understand and follow.
 
-## Repo Organization
-- 'README.md' - This file
-- Various R scripts for practice
+## Repo Structure
+- README.md – This file
+- 2.3Homework.R, HW1.4.R, MC.R – Various R scripts for practice
 
-## Contact
-Paige - pcs5318@psu.edu
+## Authors
+Paige - @pcs5318@psu.edu
